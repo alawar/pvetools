@@ -1,0 +1,12 @@
+#!/bin/bash
+. /etc/vz/vz.conf
+. ${VE_CONFFILE}
+
+DST_CDIR=container
+DST=/data
+MOUNT_CONTAINER=${VE_ROOT}${DST}/${DST_CDIR}
+
+if mountpoint -q "${MOUNT_CONTAINER}" ; then
+	umount ${MOUNT_CONTAINER}
+fi
+

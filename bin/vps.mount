@@ -1,0 +1,28 @@
+#!/bin/bash
+. /usr/local/etc/pvetools/pvetools.conf.default
+. /etc/vz/vz.conf
+. ${VE_CONFFILE}
+
+SRC=$HOST_VZ_DATA_DIR/${VEID}
+SRC_CFILE=${SRC}/ext3.fs
+MOUNT_LOCAL=${SRC}/mount
+DST_CDIR=container
+MOUNT_CONTAINER=${MOUNT_LOCAL}/${DST_CDIR}
+
+if [ ! -d ${SRC} ]; then
+	exit 0
+fi
+
+mkdir -p $MOUNT_LOCAL
+
+DST=/data
+
+if [ ! -e ${VE_ROOT}${DST} ]; then mkdir -p ${VE_ROOT}${DST}; fi
+
+mount -n -t simfs ${MOUNT_LOCAL} ${VE_ROOT}${DST} -o ${MOUNT_LOCAL}
+
+if [ -f ${SRC_CFILE} ]; then
+	mkdir -p ${MOUNT_CONTAINER}
+	mount -n ${SRC_CFILE} -t ext3 ${VE_ROOT}${DST}/${DST_CDIR} -o loop
+fi
+
