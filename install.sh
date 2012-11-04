@@ -21,3 +21,4 @@ cp -r $PREFIX/bin/vps.* $HOST_INSTALL_DIR/bin
 
 cat $PREFIX/bin/vz.vps | sed "s|<HOST_BIN>|$HOST_INSTALL_DIR\/bin|g" > /etc/vz/conf/vps.mount
 cp /etc/vz/conf/vps.mount /etc/vz/conf/vps.umount
+# readlink
