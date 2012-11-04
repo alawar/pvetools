@@ -2,6 +2,15 @@
 . /etc/vz/vz.conf
 . ${VE_CONFFILE}
 
+FILENAME=`basename $0`
+FILEEXT=`"${FILENAME##*.}"`
+
+if [ -f /etc/vz/${VEID}.${FILEEXT} ]; then
+	. /etc/vz/${VEID}.${FILEEXT}
+	exit 0
+fi
+
+
 DST_CDIR=container
 DST=/data
 MOUNT_CONTAINER=${VE_ROOT}${DST}/${DST_CDIR}
