@@ -16,9 +16,10 @@ touch $HOST_CONFIG_DIR/pvetools.conf
 
 mkdir -p $HOST_INSTALL_DIR
 
-mkdir -p $HOST_INSTALL_DIR/bin
-cp -r $PREFIX/bin/vps.* $HOST_INSTALL_DIR/bin
+rsync -a $PREFIX/bin $HOST_INSTALL_DIR
 
-cat $PREFIX/bin/vz.vps | sed "s|<HOST_BIN>|$HOST_INSTALL_DIR\/bin|g" > /etc/vz/conf/vps.mount
+cat $PREFIX/distr/vz.vps | sed "s|<HOST_BIN>|$HOST_INSTALL_DIR\/bin|g" > /etc/vz/conf/vps.mount
 cp /etc/vz/conf/vps.mount /etc/vz/conf/vps.umount
 # readlink
+ln -s $HOST_INSTALL_DIR/bin/start_all_vms.sh /usr/local/bin/${APP_PREFIX}start_all_vms.sh
+ln -s $HOST_INSTALL_DIR/bin/stop_all_vms.sh /usr/local/bin/${APP_PREFIX}stop_all_vms.sh
