@@ -3,15 +3,6 @@
 . /etc/vz/vz.conf
 . ${VE_CONFFILE}
 
-FILENAME=`basename $0`
-FILEEXT=`"${FILENAME##*.}"`
-
-if [ -f /etc/vz/${VEID}.${FILEEXT} ]; then
-	. /etc/vz/${VEID}.${FILEEXT}
-	exit 0
-fi
-
-
 SRC=$HOST_VZ_DATA_DIR/${VEID}
 SRC_CFILE=${SRC}/ext3.fs
 MOUNT_LOCAL=${SRC}/mount
