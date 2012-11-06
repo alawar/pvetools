@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [ -f /usr/local/etc/pvetools/pvetools.conf ]; then
+	cp -f /usr/local/etc/pvetools/pvetools.conf `dirname $0`/pvetools.conf
+else
+	touch `dirname $0`/pvetools.conf
+fi
+
 . `dirname $0`/pvetools.conf.default
 
 rm -f /usr/local/etc/pvetools/pvetools.conf.default
@@ -15,4 +21,6 @@ do
 		rm -f $test
 	fi
 done
+
+rm -f `dirname $0`/pvetools.conf
 
