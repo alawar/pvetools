@@ -1,9 +1,15 @@
 #!/bin/bash
 
-if [ -f /usr/local/etc/pvetools/pvetools.conf ]; then
-	cp -f /usr/local/etc/pvetools/pvetools.conf `dirname $0`/pvetools.conf
-else
-	touch `dirname $0`/pvetools.conf
+if [ -f  /usr/local/etc/pvetools/pvetools.conf ]; then
+	. `dirname $0`/uninstall.sh
+fi
+
+if [ ! -f `dirname $0`/pvetools.conf ]; then
+	if [ -f /usr/local/etc/pvetools/pvetools.conf ]; then
+		cp -f /usr/local/etc/pvetools/pvetools.conf `dirname $0`/pvetools.conf
+	else
+		touch `dirname $0`/pvetools.conf
+	fi
 fi
 
 . `dirname $0`/pvetools.conf.default
