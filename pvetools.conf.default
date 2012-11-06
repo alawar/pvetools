@@ -1,3 +1,7 @@
+#
+# Do not change this file by hands! Create file "pvetools.conf" instead!
+#
+
 PREFIX=`dirname $0`
 
 HOST_INSTALL_DIR=/usr/local/pvetools
