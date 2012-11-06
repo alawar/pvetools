@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -f  /usr/local/etc/pvetools/pvetools.conf ]; then
+if [ -f  /usr/local/etc/pvetools/pvetools.conf.default ]; then
 	. `dirname $0`/uninstall.sh
 fi
 
@@ -33,8 +33,21 @@ mkdir -p $HOST_INSTALL_DIR
 
 rsync -a $PREFIX/bin $HOST_INSTALL_DIR
 
-cat $PREFIX/distr/vz.vps | sed "s|<HOST_BIN>|$HOST_INSTALL_DIR\/bin|g" > /etc/vz/conf/vps.mount
-cp /etc/vz/conf/vps.mount /etc/vz/conf/vps.umount
+mkdir -p $HOST_INSTALL_DIR/data
+
+cat $PREFIX/distr/vz.vps | sed "s|<HOST_BIN>|$HOST_INSTALL_DIR\/bin|g" > $HOST_INSTALL_DIR/data/vps.mount
+md5sum $HOST_INSTALL_DIR/data/vps.mount | awk '{print $1'} > $HOST_INSTALL_DIR/data/vps.mount.md5
+
+if [ ! -f /etc/vz/conf/vps.mount ]; then
+	if [ ! -f /etc/vz/conf/vps.umount ]; then
+		cp -f $HOST_INSTALL_DIR/data/vps.mount /etc/vz/conf/vps.mount
+		cp -f $HOST_INSTALL_DIR/data/vps.mount /etc/vz/conf/vps.umount
+	else
+		echo "/etc/vz/conf/vps.umount already exists. Skipping..."
+	fi
+else
+	echo "/etc/vz/conf/vps.mount already exists. Skipping..."
+fi
 
 for i in $HOST_INSTALL_DIR/bin/pve_*; do
 	LINKNAME=`basename $i | sed "s/pve_/${APP_PREFIX}/g"`
