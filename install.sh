@@ -30,8 +30,8 @@ cat $PREFIX/distr/vz.vps | sed "s|<HOST_BIN>|$HOST_INSTALL_DIR\/bin|g" > /etc/vz
 cp /etc/vz/conf/vps.mount /etc/vz/conf/vps.umount
 
 for i in $HOST_INSTALL_DIR/bin/pve_*; do
-	LINKNAME=`basename $i | sed "s/pve_//g"`
-	ln -s $i /usr/local/bin/${APP_PREFIX}$LINKNAME
+	LINKNAME=`basename $i | sed "s/pve_/${APP_PREFIX}/g"`
+	ln -s $i /usr/local/bin/$LINKNAME
 done
 
 rm -f `dirname $0`/pvetools.conf
