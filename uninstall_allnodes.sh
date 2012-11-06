@@ -12,10 +12,11 @@ fi
 NODES=`cat /etc/pve/.members | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/ip/){print $(i+1)}}}' | xargs echo`
 
 SRC_DIR=`pwd`
-echo $SRC_DIR
+
 for i in $NODES; do
+	echo "Node: $i"
 	ssh $i mkdir -p /tmp/pvetools_install
-	rsync -av --progress --delete $SRC_DIR/ $i:/tmp/pvetools_install
+	rsync -a --delete --exclude '.git' $SRC_DIR/ $i:/tmp/pvetools_install
 	ssh $i /tmp/pvetools_install/uninstall.sh
 	ssh $i rm -rf /tmp/pvetools_install
 done
