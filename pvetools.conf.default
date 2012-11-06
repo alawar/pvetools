@@ -10,5 +10,10 @@ APP_PREFIX=apve_
 
 if [ -f `dirname $0`/pvetools.conf ]; then
 	. `dirname $0`/pvetools.conf
+else
+	if [ -f /usr/local/etc/pvetools/pvetools.conf ]; then
+		. /usr/local/etc/pvetools/pvetools.conf
+	fi
+
 fi
 

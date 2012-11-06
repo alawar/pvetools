@@ -29,7 +29,9 @@ rsync -a $PREFIX/bin $HOST_INSTALL_DIR
 cat $PREFIX/distr/vz.vps | sed "s|<HOST_BIN>|$HOST_INSTALL_DIR\/bin|g" > /etc/vz/conf/vps.mount
 cp /etc/vz/conf/vps.mount /etc/vz/conf/vps.umount
 
-ln -s $HOST_INSTALL_DIR/bin/start_all_vms.sh /usr/local/bin/${APP_PREFIX}start_all_vms.sh
-ln -s $HOST_INSTALL_DIR/bin/stop_all_vms.sh /usr/local/bin/${APP_PREFIX}stop_all_vms.sh
+for i in $HOST_INSTALL_DIR/bin/pve_*; do
+	LINKNAME=`basename $i | sed "s/pve_//g"`
+	ln -s $i /usr/local/bin/${APP_PREFIX}$LINKNAME
+done
 
 rm -f `dirname $0`/pvetools.conf
