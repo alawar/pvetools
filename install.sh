@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ -f $HOST_CONFIG_DIR/pvetools.conf ]; then
+	cp -f $HOST_CONFIG_DIR/pvetools.conf `dirname $0`/pvetools.conf
+fi
+
 . `dirname $0`/pvetools.conf.default
 
 if [ -f $HOST_CONFIG_DIR/pvetools.conf.default ]; then
@@ -10,7 +14,9 @@ fi
 echo "installing..."
 mkdir -p $HOST_CONFIG_DIR
 cp `dirname $0`/pvetools.conf.default $HOST_CONFIG_DIR
-ln -s $HOST_CONFIG_DIR /usr/local/etc/pvetools
+if [ ! -L /usr/local/etc/pvetools ]; then
+	ln -s $HOST_CONFIG_DIR /usr/local/etc/pvetools
+fi
 
 touch $HOST_CONFIG_DIR/pvetools.conf
 
