@@ -8,6 +8,8 @@ if [ ! -f `dirname $0`/pvetools.conf ]; then
 	fi
 fi
 
+echo "uninstalling..."
+
 . `dirname $0`/pvetools.conf.default
 
 rm -f /usr/local/etc/pvetools/pvetools.conf.default

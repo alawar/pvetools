@@ -12,6 +12,8 @@ if [ ! -f `dirname $0`/pvetools.conf ]; then
 	fi
 fi
 
+echo "installing..."
+
 . `dirname $0`/pvetools.conf.default
 
 if [ -f $HOST_CONFIG_DIR/pvetools.conf.default ]; then
@@ -19,7 +21,6 @@ if [ -f $HOST_CONFIG_DIR/pvetools.conf.default ]; then
 	exit 0
 fi
 
-echo "installing..."
 mkdir -p $HOST_CONFIG_DIR
 cp `dirname $0`/pvetools.conf.default $HOST_CONFIG_DIR
 if [ ! -L /usr/local/etc/pvetools ]; then
