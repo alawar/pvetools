@@ -11,8 +11,10 @@ fi
 
 NODES=`cat /etc/pve/.members | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/ip/){print $(i+1)}}}' | xargs echo`
 
+cd `dirname $0`
+
 SRC_DIR=`pwd`
-echo $SRC_DIR
+
 for i in $NODES; do
 	echo "Node $i"
 	ssh $i mkdir -p /tmp/pvetools_install
