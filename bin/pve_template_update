@@ -29,11 +29,13 @@ if [ "$2" = "do" ]; then
 		echo "Variable TEMPLATE_FILENAME is not set"
 	fi
 else
-NODE=`cat /etc/pve/.vmlist | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'$1'/){print $(i+2)}}}' | xargs echo`
-echo "Node: $NODE"
 
-IP=`cat /etc/pve/.members | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'$NODE'/){print $(i+6)}}}' | xargs echo`
-echo "IP: $IP"
+	IP=`$HOST_INSTALL_DIR/bin/pve_get_node $1 do`
 
-ssh $IP $FILENAME $1 do
+	if [ "$IP" ]; then
+		ssh $IP $FILENAME $1 do
+	else
+		echo "Bad CTID"
+	fi
+
 fi

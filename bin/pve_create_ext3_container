@@ -5,28 +5,48 @@
 FILENAME=`basename $0`
 
 if [ ! $1 ]; then
-	echo "usage: $FILENAME CTID [size in megabytes]. If no size specified then size is 1024."
+	echo "usage: $FILENAME CTID [size].
+
+SIZE may be (or may be an integer optionally followed by) one of following: KB 1000, K 1024, MB 1000*1000, M 1024*1024, and so on for G, T, P, E, Z, Y.
+
+If no size specified then size is 1G."
 	exit 1
 fi
 
 if [ ! $2 ]; then
-	SIZE=1024
-fi
-
-CTID_FILE=`echo $CTID_CONFFILE | sed 's/-CTID-/'$1'/g'`
-
-if [ -f $CTID_FILE ]; then
-	. $CTID_FILE
-fi
-
-DATA_DIR=$HOST_VZ_DATA_DIR/$1
-mkdir -p $DATA_DIR
-CFILE=${DATA_DIR}/ext3.fs
-
-if [ ! -f $CFILE ]; then
-	truncate -s ${1}G $CFILE
-	mkfs.ext3 -F $CFILE
+	SIZE="1G"
 else
-	echo "file $CFILE already exists."
+	SIZE=$2
+fi
+
+if [ "$3" = "do" ]; then
+
+	CTID_FILE=`echo $CTID_CONFFILE | sed 's/-CTID-/'$1'/g'`
+
+	if [ -f $CTID_FILE ]; then
+		. $CTID_FILE
+	fi
+
+	DATA_DIR=$HOST_VZ_DATA_DIR/$1
+	mkdir -p $DATA_DIR
+	CFILE=${DATA_DIR}/ext3.fs
+
+	if [ ! -f $CFILE ]; then
+		truncate -s ${SIZE} $CFILE
+		mkfs.ext3 -F $CFILE
+	else
+		echo "file $CFILE already exists:"
+		ls -lh $CFILE
+	fi
+else
+
+	IP=`$HOST_INSTALL_DIR/bin/pve_get_node $1 do`
+
+	if [ "$IP" ]; then
+		ssh $IP $FILENAME $1 $2 do
+	else
+		echo "Bad CTID"
+	fi
+
 fi
 
