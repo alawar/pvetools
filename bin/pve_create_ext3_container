@@ -1,7 +1,32 @@
 #!/bin/bash
 
-if [ ${1} ]; then
-	truncate -s ${1}M ext3.fs
-	mkfs.ext3 ext3.fs
+. /usr/local/etc/pvetools/pvetools.conf.default
+
+FILENAME=`basename $0`
+
+if [ ! $1 ]; then
+	echo "usage: $FILENAME CTID [size in megabytes]. If no size specified then size is 1024."
+	exit 1
+fi
+
+if [ ! $2 ]; then
+	SIZE=1024
+fi
+
+CTID_FILE=`echo $CTID_CONFFILE | sed 's/-CTID-/'$1'/g'`
+
+if [ -f $CTID_FILE ]; then
+	. $CTID_FILE
+fi
+
+DATA_DIR=$HOST_VZ_DATA_DIR/$1
+mkdir -p $DATA_DIR
+CFILE=${DATA_DIR}/ext3.fs
+
+if [ ! -f $CFILE ]; then
+	truncate -s ${1}M $CFILE
+	mkfs.ext3 -F $CFILE
+else
+	echo "file $CFILE already exists."
 fi
 

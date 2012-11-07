@@ -22,6 +22,7 @@ if [ "$2" = "do" ]; then
 		cd $VE_PRIVATE
 		echo "Creating archive. Please wait..."
 		rm -f var/cache/apt/archives/*.deb
+		mkdir -p $TEMPLATE_DIR
 		tar -czf $TEMPLATE_DIR/$TEMPLATE_FILENAME .
 		echo "Done."
 	else
