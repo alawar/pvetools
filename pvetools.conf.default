@@ -12,6 +12,8 @@ HOST_VZ_DATA_DIR=/var/lib/vz/data
 
 APP_PREFIX=apve_
 
+TEMPLATE_DIR=/var/lib/vz/template/cache
+
 if [ -f `dirname $0`/pvetools.conf ]; then
 	. `dirname $0`/pvetools.conf
 else
