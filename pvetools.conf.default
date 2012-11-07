@@ -14,6 +14,9 @@ APP_PREFIX=apve_
 
 TEMPLATE_DIR=/var/lib/vz/template/cache
 
+# -CTID- will be replaced by container id
+CTID_CONFFILE=$HOST_CONFIG_DIR/-CTID-.conf
+
 if [ -f `dirname $0`/pvetools.conf ]; then
 	. `dirname $0`/pvetools.conf
 else

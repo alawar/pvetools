@@ -10,23 +10,22 @@ if [ ! $1 ]; then
 fi
 
 if [ "$2" = "do" ]; then
-	. /etc/vz/conf/$1.conf
-	if [ -f $VE_PRIVATE/usr/local/etc/pvetools/pvetools.conf ]; then
-		. $VE_PRIVATE/usr/local/etc/pvetools/pvetools.conf
-		if [ $TEMPLATE_FILENAME ]; then
-			vzctl stop $1
-			cd $VE_PRIVATE
-			echo "Creating archive. Please wait..."
-			rm -f var/cache/apt/archives/*.deb
-			sed -i "s/TEMPLATE_FILENAME/#TEMPLATE_FILENAME/g" usr/local/etc/pvetools/pvetools.conf
-			tar -czf $TEMPLATE_DIR/$TEMPLATE_FILENAME .
-			sed -i "s/#TEMPLATE_FILENAME/TEMPLATE_FILENAME/g" usr/local/etc/pvetools/pvetools.conf
-			echo "Done."
-		else
-			echo "Variable TEMPLATE_FILENAME is not set"
-		fi
+	CTID_FILE=`echo $CTID_CONFFILE | sed 's/-CTID-/'$1'/g'`
+	if [ -f $CTID_FILE ]; then
+		. $CTID_FILE
 	else
-		echo "CTID $1 is not a template. Please create file /usr/local/etc/pvetools/pvetools.conf inside the container."
+		echo "CTID $1 is not look like a template. Please create file $CTID_FILE."
+	fi
+	if [ $TEMPLATE_FILENAME ]; then
+		. /etc/vz/conf/$1.conf
+		vzctl stop $1
+		cd $VE_PRIVATE
+		echo "Creating archive. Please wait..."
+		rm -f var/cache/apt/archives/*.deb
+		tar -czf $TEMPLATE_DIR/$TEMPLATE_FILENAME .
+		echo "Done."
+	else
+		echo "Variable TEMPLATE_FILENAME is not set"
 	fi
 else
 NODE=`cat /etc/pve/.vmlist | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'$1'/){print $(i+2)}}}' | xargs echo`

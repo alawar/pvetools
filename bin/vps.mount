@@ -3,6 +3,12 @@
 . /etc/vz/vz.conf
 . ${VE_CONFFILE}
 
+CTID_FILE=`echo $CTID_CONFFILE | sed 's/-CTID-/'${VEID}'/g'`
+
+if [ -f $CTID_FILE ]; then
+	. $CTID_FILE
+fi
+
 SRC=$HOST_VZ_DATA_DIR/${VEID}
 SRC_CFILE=${SRC}/ext3.fs
 MOUNT_LOCAL=${SRC}/mount
