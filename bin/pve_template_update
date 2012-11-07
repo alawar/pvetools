@@ -18,7 +18,9 @@ if [ "$2" = "do" ]; then
 			cd $VE_PRIVATE
 			echo "Creating archive. Please wait..."
 			rm -f var/cache/apt/archives/*.deb
+			sed -i "s/TEMPLATE_FILENAME/#TEMPLATE_FILENAME/g" usr/local/etc/pvetools/pvetools.conf
 			tar -czf $TEMPLATE_DIR/$TEMPLATE_FILENAME .
+			sed -i "s/#TEMPLATE_FILENAME/TEMPLATE_FILENAME/g" usr/local/etc/pvetools/pvetools.conf
 			echo "Done."
 		else
 			echo "Variable TEMPLATE_FILENAME is not set"
