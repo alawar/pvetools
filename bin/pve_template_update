@@ -17,6 +17,7 @@ if [ "$2" = "do" ]; then
 			vzctl stop $1
 			cd $VE_PRIVATE
 			echo "Creating archive. Please wait..."
+			rm -f var/cache/apt/archives/*.deb
 			tar -czf $TEMPLATE_DIR/$TEMPLATE_FILENAME .
 			echo "Done."
 		else
