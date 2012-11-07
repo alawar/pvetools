@@ -1,0 +1,34 @@
+#!/bin/bash
+
+. /usr/local/etc/pvetools/pvetools.conf.default
+
+FILENAME=`basename $0`
+
+if [ ! $1 ]; then
+	echo "usage: $FILENAME CTID"
+	exit 1
+fi
+
+if [ "$2" = "do" ]; then
+	. /etc/vz/conf/$1.conf
+	if [ -f $VE_PRIVATE/usr/local/etc/pvetools/pvetools.conf ]; then
+		. $VE_PRIVATE/usr/local/etc/pvetools/pvetools.conf
+		if [ $TEMPLATE_FILENAME ]; then
+			vzctl stop $1
+			cd $VE_PRIVATE
+			tar -czf $TEMPLATE_DIR/$TEMPLATE_FILENAME .
+		else
+			echo "Variable TEMPLATE_FILENAME is not set"
+		fi
+	else
+		echo "CTID $1 is not a template. Please create file /usr/local/etc/pvetools/pvetools.conf inside the container."
+	fi
+else
+NODE=`cat /etc/pve/.vmlist | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'$1'/){print $(i+2)}}}' | xargs echo`
+echo "Node: $NODE"
+
+IP=`cat /etc/pve/.members | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/'$NODE'/){print $(i+6)}}}' | xargs echo`
+echo "IP: $IP"
+
+ssh $IP $FILENAME $1 do
+fi
