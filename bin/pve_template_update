@@ -16,7 +16,9 @@ if [ "$2" = "do" ]; then
 		if [ $TEMPLATE_FILENAME ]; then
 			vzctl stop $1
 			cd $VE_PRIVATE
+			echo "Creating archive. Please wait..."
 			tar -czf $TEMPLATE_DIR/$TEMPLATE_FILENAME .
+			echo "Done."
 		else
 			echo "Variable TEMPLATE_FILENAME is not set"
 		fi
