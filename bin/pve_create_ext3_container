@@ -24,7 +24,7 @@ mkdir -p $DATA_DIR
 CFILE=${DATA_DIR}/ext3.fs
 
 if [ ! -f $CFILE ]; then
-	truncate -s ${1}M $CFILE
+	truncate -s ${1}G $CFILE
 	mkfs.ext3 -F $CFILE
 else
 	echo "file $CFILE already exists."
