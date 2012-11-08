@@ -1,0 +1,21 @@
+#!/bin/bash
+
+FILENAME=`basename $0`
+
+if [ ! $1 ]; then
+	echo "usage: $FILENAME CTID"
+	exit 1
+fi
+
+NODE=`cat /etc/pve/.vmlist | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/"'$1'"/){print $(i+2)}}}' | xargs echo`
+
+if [ ! $NODE ]; then
+	exit 1
+fi
+
+if [ "$2" != "do" ]; then
+	echo $NODE
+fi
+
+IP=`cat /etc/pve/.members | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/"'$NODE'"/){print $(i+6)}}}' | xargs echo`
+echo "$IP"
