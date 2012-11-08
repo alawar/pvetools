@@ -17,10 +17,14 @@ SRC_DIR=`pwd`
 
 for i in $NODES; do
 	echo "Node $i"
-	ssh $i mkdir -p /tmp/pvetools_install
-	rsync -a --delete --exclude '.git' $SRC_DIR/ $i:/tmp/pvetools_install
-	ssh $i /tmp/pvetools_install/install.sh
-	ssh $i rm -rf /tmp/pvetools_install
+	TEMP_DIR=`ssh $i mktemp -d --suffix _pve`
+	if [ "$TEMP_DIR" ]; then
+		rsync -a --delete --exclude '.git' $SRC_DIR/ $i:$TEMP_DIR
+		ssh $i $TEMP_DIR/install.sh
+		ssh $i rm -rf $TEMP_DIR
+	else
+		echo "Cannot create temp dir!"
+	fi
 done
 
 rm -f `dirname $0`/pvetools.conf
