@@ -15,5 +15,6 @@ MOUNTS=`cat /proc/mounts | grep $CLUSTER_FS | awk '{print $2}'`
 
 for i in $MOUNTS; do
 	echo "umount $i"
+	umount $i
 done
 
