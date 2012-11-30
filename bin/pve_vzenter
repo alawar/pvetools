@@ -1,0 +1,21 @@
+#!/bin/bash
+
+. /usr/local/etc/pvetools/pvetools.conf.default
+
+FILENAME=`basename $0`
+
+if [ ! $1 ]; then
+	echo "usage: $FILENAME CTID"
+	exit 1
+fi
+
+IP=`$HOST_INSTALL_DIR/bin/pve_get_node $1 do`
+if [ "$IP" ]; then
+	if [ "$IP" = "LOCALHOST" ]; then
+		vzctl enter $1
+	else
+		ssh -t $IP vzctl enter $1
+	fi
+else
+	echo "Bad CTID"
+fi

@@ -7,6 +7,13 @@ if [ ! $1 ]; then
 	exit 1
 fi
 
+IS_CLIUSTER=`grep cluster /etc/pve/.members | wc -l`
+
+if [ "$IS_CLIUSTER" = "0" ]; then
+	echo "LOCALHOST"
+	exit
+fi
+
 NODE=`cat /etc/pve/.vmlist | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/"'$1'"/){print $(i+2)}}}' | xargs echo`
 
 if [ ! $NODE ]; then

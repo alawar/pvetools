@@ -43,7 +43,11 @@ else
 	IP=`$HOST_INSTALL_DIR/bin/pve_get_node $1 do`
 
 	if [ "$IP" ]; then
-		ssh $IP $FILENAME $1 $2 do
+		if [ "$IP" = "LOCALHOST" ]; then
+			$FILENAME $1 $2 do
+		else
+			ssh $IP $FILENAME $1 $2 do
+		fi
 	else
 		echo "Bad CTID"
 	fi

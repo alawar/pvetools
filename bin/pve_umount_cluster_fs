@@ -1,0 +1,20 @@
+#!/bin/bash
+
+. /usr/local/etc/pvetools/pvetools.conf.default
+
+FILENAME=`basename $0`
+
+if [ "$1" != "yes" ]; then
+	echo "usage: $FILENAME yes"
+	exit 1
+fi
+
+$HOST_INSTALL_DIR/bin/pve_stop_all_vms
+
+MOUNTS=`cat /proc/mounts | grep $CLUSTER_FS | awk '{print $2}'`
+
+for i in $MOUNTS; do
+	echo "umount $i"
+	umount $i
+done
+
