@@ -10,7 +10,7 @@ HOST_CONFIG_DIR=$HOST_INSTALL_DIR/config
 
 HOST_VZ_DATA_DIR=/var/lib/vz/data
 
-APP_PREFIX=apve_
+APP_PREFIX=ap_
 
 TEMPLATE_DIR=/var/lib/vz/template/cache
 
