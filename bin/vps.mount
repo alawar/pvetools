@@ -12,12 +12,13 @@ fi
 SRC=$HOST_VZ_DATA_DIR/${VEID}
 SRC_CFILE=${SRC}/ext3.fs
 MOUNT_LOCAL=${SRC}/mount
-DST_CDIR=mnt/container
-DST_UDIR=mnt/disk
+DST_CDIR=container
+DST_UDIR=disk
 MOUNT_CONTAINER=${MOUNT_LOCAL}/${DST_CDIR}
 MOUNT_UUID=${MOUNT_LOCAL}/${DST_UDIR}
 
 DST=/data
+DST_MNT=/mnt
 
 if [ -d ${SRC} ]; then
 	mkdir -p $MOUNT_LOCAL
@@ -27,12 +28,12 @@ fi
 
 if [ -f ${SRC_CFILE} ]; then
 #	mkdir -p ${MOUNT_CONTAINER}
-	mkdir -p ${VE_ROOT}${DST}/${DST_CDIR}
-	mount -n ${SRC_CFILE} -t ext3 ${VE_ROOT}${DST}/${DST_CDIR} -o loop
+	mkdir -p ${VE_ROOT}${DST_MNT}/${DST_CDIR}
+	mount -n ${SRC_CFILE} -t ext3 ${VE_ROOT}${DST_MNT}/${DST_CDIR} -o loop
 fi
 
 if [ $FS_BY_UUID ]; then
 #	mkdir -p ${MOUNT_UUID}
-	mkdir -p ${VE_ROOT}${DST}/${DST_UDIR}
-	mount -n -U ${FS_BY_UUID} ${VE_ROOT}${DST}/${DST_UDIR}
+	mkdir -p ${VE_ROOT}${DST_MNT}/${DST_UDIR}
+	mount -n -U ${FS_BY_UUID} ${VE_ROOT}${DST_MNT}/${DST_UDIR}
 fi
