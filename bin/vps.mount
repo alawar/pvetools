@@ -12,8 +12,10 @@ fi
 SRC=$HOST_VZ_DATA_DIR/${VEID}
 SRC_CFILE=${SRC}/ext3.fs
 MOUNT_LOCAL=${SRC}/mount
-DST_CDIR=container
+DST_CDIR=mnt/container
+DST_UDIR=mnt/disk
 MOUNT_CONTAINER=${MOUNT_LOCAL}/${DST_CDIR}
+MOUNT_UUID=${MOUNT_LOCAL}/${DST_UDIR}
 
 if [ ! -d ${SRC} ]; then
 	exit 0
@@ -32,3 +34,7 @@ if [ -f ${SRC_CFILE} ]; then
 	mount -n ${SRC_CFILE} -t ext3 ${VE_ROOT}${DST}/${DST_CDIR} -o loop
 fi
 
+if [ $FS_BY_UUID ]; then
+	mkdir -p ${MOUNT_UUID}
+	mount -U ${FS_BY_UUID} ${VE_ROOT}${DST}/${DST_UDIR}
+fi

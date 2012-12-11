@@ -19,6 +19,8 @@ CTID_CONFFILE=$HOST_CONFIG_DIR/-CTID-.conf
 
 CLUSTER_FS="gfs2"
 
+#FS_BY_UUID=UUID
+
 if [ -f `dirname $0`/pvetools.conf ]; then
 	. `dirname $0`/pvetools.conf
 else

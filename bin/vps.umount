@@ -3,10 +3,16 @@
 . ${VE_CONFFILE}
 
 DST_CDIR=container
+DST_UDIR=disk
 DST=/data
 MOUNT_CONTAINER=${VE_ROOT}${DST}/${DST_CDIR}
+MOUNT_UUID=${VE_ROOT}${DST}/${DST_UDIR}
 
 if mountpoint -q "${MOUNT_CONTAINER}" ; then
 	umount ${MOUNT_CONTAINER}
+fi
+
+if mountpoint -q "${MOUNT_UUID}" ; then
+        umount ${MOUNT_UUID}
 fi
 
