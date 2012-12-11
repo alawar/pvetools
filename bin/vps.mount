@@ -17,24 +17,22 @@ DST_UDIR=mnt/disk
 MOUNT_CONTAINER=${MOUNT_LOCAL}/${DST_CDIR}
 MOUNT_UUID=${MOUNT_LOCAL}/${DST_UDIR}
 
-if [ ! -d ${SRC} ]; then
-	exit 0
-fi
-
-mkdir -p $MOUNT_LOCAL
-
 DST=/data
 
-if [ ! -e ${VE_ROOT}${DST} ]; then mkdir -p ${VE_ROOT}${DST}; fi
-
-mount -n -t simfs ${MOUNT_LOCAL} ${VE_ROOT}${DST} -o ${MOUNT_LOCAL}
+if [ -d ${SRC} ]; then
+	mkdir -p $MOUNT_LOCAL
+	mkdir -p ${VE_ROOT}${DST}
+	mount -n -t simfs ${MOUNT_LOCAL} ${VE_ROOT}${DST} -o ${MOUNT_LOCAL}
+fi
 
 if [ -f ${SRC_CFILE} ]; then
-	mkdir -p ${MOUNT_CONTAINER}
+#	mkdir -p ${MOUNT_CONTAINER}
+	mkdir -p ${VE_ROOT}${DST}/${DST_CDIR}
 	mount -n ${SRC_CFILE} -t ext3 ${VE_ROOT}${DST}/${DST_CDIR} -o loop
 fi
 
 if [ $FS_BY_UUID ]; then
-	mkdir -p ${MOUNT_UUID}
+#	mkdir -p ${MOUNT_UUID}
+	mkdir -p ${VE_ROOT}${DST}/${DST_UDIR}
 	mount -U ${FS_BY_UUID} ${VE_ROOT}${DST}/${DST_UDIR}
 fi
