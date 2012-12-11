@@ -2,8 +2,8 @@
 . /etc/vz/vz.conf
 . ${VE_CONFFILE}
 
-DST_CDIR=container
-DST_UDIR=disk
+DST_CDIR=mnt/container
+DST_UDIR=mnt/disk
 DST=/data
 MOUNT_CONTAINER=${VE_ROOT}${DST}/${DST_CDIR}
 MOUNT_UUID=${VE_ROOT}${DST}/${DST_UDIR}
@@ -13,6 +13,6 @@ if mountpoint -q "${MOUNT_CONTAINER}" ; then
 fi
 
 if mountpoint -q "${MOUNT_UUID}" ; then
-        umount ${MOUNT_UUID}
+	echo "umounting ${MOUNT_UUID}..."
+	umount ${MOUNT_UUID}
 fi
-

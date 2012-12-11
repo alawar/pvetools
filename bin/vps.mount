@@ -34,5 +34,5 @@ fi
 if [ $FS_BY_UUID ]; then
 #	mkdir -p ${MOUNT_UUID}
 	mkdir -p ${VE_ROOT}${DST}/${DST_UDIR}
-	mount -U ${FS_BY_UUID} ${VE_ROOT}${DST}/${DST_UDIR}
+	mount -n -U ${FS_BY_UUID} ${VE_ROOT}${DST}/${DST_UDIR}
 fi
