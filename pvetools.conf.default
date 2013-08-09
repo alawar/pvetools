@@ -23,6 +23,9 @@ CLUSTER_FS="gfs2"
 
 #DIR_TO_SYNC=/usr/local/pvetools/dir
 
+STORAGE_ISCSI_VG=CLUSTER01
+STORAGE_ISCSI_CT=/storage-iscsi
+
 if [ -f `dirname $0`/pvetools.conf ]; then
 	. `dirname $0`/pvetools.conf
 else

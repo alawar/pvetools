@@ -1,8 +1,15 @@
 #!/bin/bash
 
+. /usr/local/etc/pvetools/pvetools.conf.default
+
 NODE=`hostname`
 
 pvesh create /nodes/$NODE/stopall
+
+if mountpoint -q "${STORAGE_ISCSI_CT}" ; then
+	umount ${STORAGE_ISCSI_CT}
+fi
+
 
 echo ""
 
