@@ -2,6 +2,8 @@
 
 . /usr/local/etc/pvetools/pvetools.conf.default
 
+NODE=`hostname`
+
 $HOST_INSTALL_DIR/bin/pve_mount_storage_san
 
 pvesh create /nodes/$NODE/startall
