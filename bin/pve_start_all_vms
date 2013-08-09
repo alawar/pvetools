@@ -1,6 +1,15 @@
 #!/bin/bash
 
+. /usr/local/etc/pvetools/pvetools.conf.default
+
 NODE=`hostname`
+
+if [ -e /dev/${STORAGE_ISCSI_VG}/${NODE} ] ; then
+	if ! mountpoint -q "${STORAGE_ISCSI_CT}" ; then
+		mkdir -p ${STORAGE_ISCSI_CT}
+		mount /dev/${STORAGE_ISCSI_VG}/${NODE} ${STORAGE_ISCSI_CT}
+	fi
+fi
 
 pvesh create /nodes/$NODE/startall
 
