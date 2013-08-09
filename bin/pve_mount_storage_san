@@ -1,0 +1,14 @@
+#!/bin/bash
+
+. /usr/local/etc/pvetools/pvetools.conf.default
+
+NODE=`hostname`
+
+if [ -e /dev/${STORAGE_SAN_VG}/${NODE} ] ; then
+	if ! mountpoint -q "${STORAGE_SAN_CT}" ; then
+		mkdir -p ${STORAGE_SAN_CT}
+		mount /dev/${STORAGE_SAN_VG}/${NODE} ${STORAGE_SAN_CT}
+	fi
+fi
+
+
