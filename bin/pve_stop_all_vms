@@ -6,8 +6,8 @@ NODE=`hostname`
 
 pvesh create /nodes/$NODE/stopall
 
-if mountpoint -q "${STORAGE_ISCSI_CT}" ; then
-	umount ${STORAGE_ISCSI_CT}
+if mountpoint -q "${STORAGE_SAN_CT}" ; then
+	umount ${STORAGE_SAN_CT}
 fi
 
 

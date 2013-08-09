@@ -18,7 +18,7 @@ fi
 
 if [ "$3" = "do" ]; then
 	LVNAME="PTCT$1"
-	LV=/dev/$STORAGE_ISCSI_VG/$LVNAME
+	LV=/dev/$STORAGE_SAN_VG/$LVNAME
 	CTID_FILE=`echo $CTID_CONFFILE | sed 's/-CTID-/'$1'/g'`
 
 	if [ -f $CTID_FILE ]; then
@@ -35,7 +35,7 @@ if [ "$3" = "do" ]; then
 		exit 1
 	fi
 
-	lvcreate -n $LVNAME -L $SIZE $STORAGE_ISCSI_VG
+	lvcreate -n $LVNAME -L $SIZE $STORAGE_SAN_VG
 	mkfs.ext3 $LV
 	FS_BY_UUID=`blkid -o value $LV | head -n 1`
 	echo "FS_BY_UUID=$FS_BY_UUID" >> $CTID_FILE
