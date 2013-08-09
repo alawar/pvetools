@@ -1,0 +1,63 @@
+#!/bin/bash
+
+. /usr/local/etc/pvetools/pvetools.conf.default
+
+FILENAME=`basename $0`
+
+if [ ! $1 ]; then
+	echo "usage: $FILENAME CTID [size].
+"
+	exit 1
+fi
+
+if [ ! $2 ]; then
+	SIZE="1G"
+else
+	SIZE=$2
+fi
+
+if [ "$3" = "do" ]; then
+	LVNAME="PTCT$1"
+	LV=/dev/$STORAGE_ISCSI_VG/$LVNAME
+	CTID_FILE=`echo $CTID_CONFFILE | sed 's/-CTID-/'$1'/g'`
+
+	if [ -f $CTID_FILE ]; then
+		. $CTID_FILE
+	fi
+
+	if [ $FS_BY_UUID ]; then
+		echo "FS_BY_UUID variable already set for CTID $1"
+		exit 1
+	fi
+
+	if [ -e $LV ]; then
+		echo "Logical volume $LV already exists"
+		exit 1
+	fi
+
+	lvcreate -n $LVNAME -L $SIZE $STORAGE_ISCSI_VG
+	mkfs.ext3 $LV
+	FS_BY_UUID=`blkid -o value $LV | head -n 1`
+	echo "FS_BY_UUID=$FS_BY_UUID" >> $CTID_FILE
+
+else
+	if [ ! $2 ]; then
+        	SIZE="1G"
+	else
+        	SIZE=$2
+	fi
+
+	IP=`$HOST_INSTALL_DIR/bin/pve_get_node $1 do`
+
+	if [ "$IP" ]; then
+		if [ "$IP" = "LOCALHOST" ]; then
+			$FILENAME $1 $SIZE do
+		else
+			ssh $IP $FILENAME $1 $SIZE do
+		fi
+	else
+		echo "Bad CTID"
+	fi
+
+fi
+
