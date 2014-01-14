@@ -4,8 +4,11 @@
 
 FILENAME=`basename $0`
 
+STARR=($STORAGE_SAN_VG)
+STSANVG=${STARR[0]}
+
 if [ ! $1 ]; then
-	echo "usage: $FILENAME CTID [size].
+	echo "usage: $FILENAME CTID size [storage].
 "
 	exit 1
 fi
@@ -16,9 +19,13 @@ else
 	SIZE=$2
 fi
 
-if [ "$3" = "do" ]; then
+if [ "$3" ]; then
+	STSANVG=$3
+fi
+
+if [ "$4" = "do" ]; then
 	LVNAME="PTCT$1"
-	LV=/dev/$STORAGE_SAN_VG/$LVNAME
+	LV=/dev/$STSANVG/$LVNAME
 	CTID_FILE=`echo $CTID_CONFFILE | sed 's/-CTID-/'$1'/g'`
 
 	if [ -f $CTID_FILE ]; then
@@ -35,10 +42,20 @@ if [ "$3" = "do" ]; then
 		exit 1
 	fi
 
-	lvcreate -n $LVNAME -L $SIZE $STORAGE_SAN_VG
-	mkfs.ext3 $LV
-	FS_BY_UUID=`blkid -o value $LV | head -n 1`
-	echo "FS_BY_UUID=$FS_BY_UUID" >> $CTID_FILE
+	lvcreate -n $LVNAME -L $SIZE $STSANVG
+	if [ -e $LV ]; then
+		FS_BY_UUID=`blkid -o value $LV | head -n 1`
+		if [ ! "$FS_BY_UUID" ]; then
+			mkfs.ext3 $LV
+			FS_BY_UUID=`blkid -o value $LV | head -n 1`
+			echo "FS_BY_UUID=$FS_BY_UUID" >> $CTID_FILE
+			echo "FS_BY_UUID=$FS_BY_UUID"
+		else
+			echo "This volume is already formatted"
+		fi
+	else
+		echo "Error"
+	fi
 
 else
 	if [ ! $2 ]; then
@@ -51,9 +68,9 @@ else
 
 	if [ "$IP" ]; then
 		if [ "$IP" = "LOCALHOST" ]; then
-			$FILENAME $1 $SIZE do
+			$FILENAME $1 $SIZE $STSANVG do
 		else
-			ssh $IP $FILENAME $1 $SIZE do
+			ssh $IP $FILENAME $1 $SIZE $STSANVG do
 		fi
 	else
 		echo "Bad CTID"
