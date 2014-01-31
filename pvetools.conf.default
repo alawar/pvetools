@@ -26,9 +26,9 @@ CLUSTER_FS="gfs2"
 STORAGE_SAN_VG=CLUSTER01	#example: STORAGE_SAN_VG="CLUSTER01 CLUSTER02"
 STORAGE_SAN_CT=/storage-san	#example: STORAGE_SAN_CT="/storage-san /storage-san2"
 
-BACKUP_HOST=srv04-vmx.pve.alawar.local
-BACKUP_DIR_REMOTE=/storage/backup_servers/CT
-
+BACKUP_HOST=SETME
+BACKUP_DIR_REMOTE=SETME
+BACKUP_CT_DIR=/usr/local/etc/backup
 
 if [ -f `dirname $0`/pvetools.conf ]; then
 	. `dirname $0`/pvetools.conf
