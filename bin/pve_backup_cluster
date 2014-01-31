@@ -1,0 +1,10 @@
+#!/bin/bash
+
+. /usr/local/etc/pvetools/pvetools.conf.default
+
+BACKUP_SCRIPT=$HOST_INSTALL_DIR/bin/pve_backup
+
+NODES=`cat /etc/pve/.members | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/ip/){print $(i+1)}}}' | xargs echo`
+for i in $NODES; do
+	ssh $i "if [ -x $BACKUP_SCRIPT ]; then $BACKUP_SCRIPT; fi"
+done
