@@ -3,10 +3,17 @@
 . ${VE_CONFFILE}
 
 DST_CDIR=container
+DST_UDIR=disk
 DST=/data
-MOUNT_CONTAINER=${VE_ROOT}${DST}/${DST_CDIR}
+DST_MNT=/mnt
+MOUNT_CONTAINER=${VE_ROOT}${DST_MNT}/${DST_CDIR}
+MOUNT_UUID=${VE_ROOT}${DST_MNT}/${DST_UDIR}
 
 if mountpoint -q "${MOUNT_CONTAINER}" ; then
 	umount ${MOUNT_CONTAINER}
 fi
 
+if mountpoint -q "${MOUNT_UUID}" ; then
+	echo "umounting ${MOUNT_UUID}..."
+	umount ${MOUNT_UUID}
+fi

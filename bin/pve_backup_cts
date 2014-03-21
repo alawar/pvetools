@@ -1,0 +1,67 @@
+#!/bin/bash
+
+. /usr/local/etc/pvetools/pvetools.conf.default
+
+if [ "$BACKUP_HOST" = "SETME" ]; then
+	echo "Please set BACKUP_HOST variable"
+	exit 1
+fi
+
+if [ "$BACKUP_DIR_REMOTE" = "SETME" ]; then
+	echo "Please set BACKUP_DIR_REMOTE variable"
+	exit 1
+fi
+
+DIR_CT=/var/lib/vz/root
+DIR_BACKUP_NAME=$BACKUP_CT_DIR
+
+HOST_DST=$BACKUP_HOST
+DIR_DST_REMOTE=$BACKUP_DIR_REMOTE
+DIR_DST_BASE=$HOST_DST:$DIR_DST_REMOTE
+
+
+for i in $DIR_CT/*; do
+	CTID=`basename $i`
+	DIR_BACKUP=$i/$DIR_BACKUP_NAME
+	if [ -d $DIR_BACKUP ]; then
+		for j in $DIR_BACKUP/*; do
+			if [ "`basename $j`" != "*" ]; then
+				DIR_DST_NAME=`basename $j`
+				if [ -h $j ]; then
+					DIR_LINK=`readlink $j`
+					if [ "${DIR_LINK:0:1}" = "/" ]; then
+						DIR_SRC=$i/$DIR_LINK
+					else
+						DIR_SRC=$DIR_BACKUP/$DIR_LINK
+					fi
+				else
+					DIR_SRC=$j
+				fi
+				DIR_DST=$DIR_DST_BASE/$CTID
+				if [ ! $DIR_DST ]; then
+					echo "Destination host is not known!"
+					exit 1
+				fi
+
+				if [ ! $DIR_DST_NAME ]; then
+					echo "Destination dir is not known!"
+					exit 1
+				fi
+
+				ssh $HOST_DST mkdir -p $DIR_DST_REMOTE/$CTID/$DIR_DST_NAME
+				rsync -av --numeric-ids --delete $DIR_SRC/ $DIR_DST/$DIR_DST_NAME > /tmp/backup_log.txt
+				scp /tmp/backup_log.txt $DIR_DST/$DIR_DST_NAME.log
+				rm -f /tmp/backup_log.txt
+			fi
+		done
+	fi
+done
+if [ $HOSTNAME ]; then
+	if [ ! $DIR_DST_BASE ]; then
+		echo "DIR_DST_BASE is not known!"
+		exit 1
+	fi
+	ssh $HOST_DST mkdir -p $DIR_DST_REMOTE/$HOSTNAME
+	rsync --numeric-ids -av --delete /etc $DIR_DST_BASE/$HOSTNAME
+	rsync --numeric-ids -av --delete /mnt/smb/PVEBackups/bin $DIR_DST_BASE/$HOSTNAME
+fi

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+. /usr/local/etc/pvetools/pvetools.conf.default
+
+NODE=`hostname`
+
+STSCT=($STORAGE_SAN_CT)
+IND_I=0
+
+for i in $STORAGE_SAN_VG; do
+	echo -n "$i: "
+	STORAGE_SAN_CURRENT=${STSCT[$IND_I]}
+	if [ "$STORAGE_SAN_CURRENT" ]; then
+		if [ -e /dev/${i}/${NODE} ] ; then
+			if ! mountpoint -q "${STORAGE_SAN_CURRENT}" ; then
+				mkdir -p ${STORAGE_SAN_CURRENT}
+				mount /dev/${i}/${NODE} ${STORAGE_SAN_CURRENT}
+				echo "Ok"
+			else
+				echo "Already mounted"
+			fi
+		fi
+	else
+		echo "Absent mount point info. Skipped"
+	fi
+	IND_I=$[IND_I+1]
+done
+

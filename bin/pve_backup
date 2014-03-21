@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# скрипт дергает внутри каждой виртуалки скрипт /usr/local/bin/backup.sh
+
+. /usr/local/etc/pvetools/pvetools.conf.default
+
+BACKUP_CTS=$HOST_INSTALL_DIR/bin/pve_backup_cts
+BACKUP_SCRIPT=/usr/local/bin/backup.sh
+
+for i in `vzlist | awk '{print $1}' | grep -v CTID`; do
+	vzctl exec $i "if [ -x $BACKUP_SCRIPT ]; then su - -c $BACKUP_SCRIPT; fi"
+done
+
+$BACKUP_CTS
+
+exit 0
+

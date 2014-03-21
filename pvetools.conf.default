@@ -19,6 +19,17 @@ CTID_CONFFILE=$HOST_CONFIG_DIR/-CTID-.conf
 
 CLUSTER_FS="gfs2"
 
+#FS_BY_UUID=UUID
+
+#DIR_TO_SYNC=/usr/local/pvetools/dir
+
+STORAGE_SAN_VG=CLUSTER01	#example: STORAGE_SAN_VG="CLUSTER01 CLUSTER02"
+STORAGE_SAN_CT=/storage-san	#example: STORAGE_SAN_CT="/storage-san /storage-san2"
+
+BACKUP_HOST=SETME
+BACKUP_DIR_REMOTE=SETME
+BACKUP_CT_DIR=/usr/local/etc/backup
+
 if [ -f `dirname $0`/pvetools.conf ]; then
 	. `dirname $0`/pvetools.conf
 else

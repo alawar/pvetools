@@ -1,0 +1,8 @@
+#!/bin/bash
+
+. /usr/local/etc/pvetools/pvetools.conf.default
+
+BACKUP_SCRIPT=$HOST_INSTALL_DIR/bin/pve_backup
+
+if [ -x $BACKUP_SCRIPT ]; then $BACKUP_SCRIPT; fi
+
