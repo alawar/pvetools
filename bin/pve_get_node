@@ -1,5 +1,6 @@
 #!/bin/bash
 
+. /usr/local/etc/pvetools/pvetools.conf.default
 FILENAME=`basename $0`
 
 if [ ! $1 ]; then
@@ -7,12 +8,7 @@ if [ ! $1 ]; then
 	exit 1
 fi
 
-IS_CLIUSTER=`grep cluster /etc/pve/.members | wc -l`
-
-if [ "$IS_CLIUSTER" = "0" ]; then
-	echo "LOCALHOST"
-	exit
-fi
+$HOST_INSTALL_DIR/bin/pve_is_cluster || { echo "LOCALHOST"; exit; }
 
 NODE=`cat /etc/pve/.vmlist | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/"'$1'"/){print $(i+2)}}}' | xargs echo`
 
