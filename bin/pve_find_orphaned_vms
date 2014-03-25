@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Search orphaned objects
+
+. /usr/local/etc/pvetools/pvetools.conf.default
+
+$HOST_INSTALL_DIR/bin/pve_is_cluster || { echo "LOCALHOST"; exit; }
+
+TEMP_CTS_LIST=$(find /etc/pve/nodes/*/openvz/*.conf)
+
+FLAG_OK="OK"
+
+# search config files for OpenVZ CTs
+for i in $TEMP_CTS_LIST; do
+	CTID=$(basename $i | sed 's/.conf//g')
+	NODE_CLUSTER=$(cat /etc/pve/.vmlist | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/"'$CTID'"/){print $(i+2)}}}' | xargs echo)
+	if [ "$NODE_CLUSTER" = "" ]; then
+		FLAG_OK=""
+		echo "CT: $CTID, config: $i"
+	fi
+done
+
+TEMP_VMS_LIST=$(find /etc/pve/nodes/*/qemu-server/*.conf)
+# search config files for Qemu VMs
+for i in $TEMP_VMS_LIST; do
+        VM=$(basename $i | sed 's/.conf//g')
+        NODE_CLUSTER=$(cat /etc/pve/.vmlist | awk -F"[,:}]" '{for(i=1;i<=NF;i++){if($i~/"'$VM'"/){print $(i+2)}}}' | xargs echo)
+        if [ "$NODE_CLUSTER" = "" ]; then
+		FLAG_OK=""
+                echo "VM: $VM, config: $i"
+        fi
+done
+
+if [ "$FLAG_OK" = "FALSE" ]; then
+	echo  $FLAG_OK
+fi
+
