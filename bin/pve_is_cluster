@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# check if cluster configured
+
+FILENAME=`basename $0`
+
+IS_CLUSTER=`grep cluster /etc/pve/.members | wc -l`
+
+if [ "$IS_CLUSTER" = "0" ]; then
+	exit 1
+fi
+
+exit 0
+
