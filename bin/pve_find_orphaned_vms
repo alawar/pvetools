@@ -4,7 +4,7 @@
 
 . /usr/local/etc/pvetools/pvetools.conf.default
 
-$HOST_INSTALL_DIR/bin/pve_is_cluster || { echo "LOCALHOST"; exit; }
+#$HOST_INSTALL_DIR/bin/pve_is_cluster || { echo "LOCALHOST"; exit; }
 
 TEMP_CTS_LIST=$(find /etc/pve/nodes/*/openvz/*.conf)
 
@@ -31,7 +31,7 @@ for i in $TEMP_VMS_LIST; do
         fi
 done
 
-if [ "$FLAG_OK" = "FALSE" ]; then
+if [ "$FLAG_OK" = "OK" ]; then
 	echo  $FLAG_OK
 fi
 
