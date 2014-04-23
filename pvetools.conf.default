@@ -29,7 +29,7 @@ STORAGE_SAN_CT=/storage-san	#example: STORAGE_SAN_CT="/storage-san /storage-san2
 BACKUP_HOST=SETME
 BACKUP_DIR_REMOTE=SETME
 BACKUP_CT_DIR=/usr/local/etc/pve-backup		# каталог внутри контейнера, в котором находятся симлинки на бэкапируемые каталоги
-BACKUP_SCRIPT_NAME=/usr/local/bin/backup.sh	# скрипт, который надо дергать внутри контейнера при бэкапе
+BACKUP_SCRIPT_NAME=/usr/local/bin/pve-backup.sh	# скрипт, который надо дергать внутри контейнера при бэкапе
 
 if [ -f `dirname $0`/pvetools.conf ]; then
 	. `dirname $0`/pvetools.conf
