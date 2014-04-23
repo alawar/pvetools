@@ -5,7 +5,7 @@
 . /usr/local/etc/pvetools/pvetools.conf.default
 
 BACKUP_CTS=$HOST_INSTALL_DIR/bin/pve_backup_cts
-BACKUP_SCRIPT=/usr/local/bin/backup.sh
+BACKUP_SCRIPT=$BACKUP_SCRIPT_NAME
 
 for i in `vzlist | awk '{print $1}' | grep -v CTID`; do
 	vzctl exec $i "if [ -x $BACKUP_SCRIPT ]; then su - -c $BACKUP_SCRIPT; fi"
