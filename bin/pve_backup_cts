@@ -54,6 +54,7 @@ for i in $DIR_CT/*; do
 				rm -f /tmp/backup_log.txt
 			fi
 		done
+		vzctl exec `basename $i` "echo 1 > /var/log/pve-backup.log"
 	fi
 done
 if [ $HOSTNAME ]; then
